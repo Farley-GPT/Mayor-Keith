@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Portland</title>
+    <title>Welcome to Portland | Keith Wilson</title>
     <style>
+        :root {
+            --pdx-red: #d4232a;
+            --pdx-green: #2d5a27;
+            --pdx-gold: #ffb800;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.15);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,305 +20,259 @@
         }
 
         body {
-            background: linear-gradient(135deg, #2d5a27 0%, #1a3a1a 50%, #0d1f0d 100%);
+            background: radial-gradient(circle at top right, #1a3a1a, #0d1f0d);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: white;
             overflow: hidden;
-            position: relative;
         }
 
-        /* Rose City decorative elements */
-        body::before {
-            content: "🌹";
+        /* Ambient background roses */
+        .ambient-rose {
             position: absolute;
-            font-size: 200px;
-            opacity: 0.05;
-            top: 10%;
-            left: 10%;
-            animation: float 6s ease-in-out infinite;
+            font-size: clamp(100px, 20vw, 300px);
+            opacity: 0.03;
+            filter: grayscale(1) brightness(2);
+            z-index: 0;
+            pointer-events: none;
         }
 
-        body::after {
-            content: "🌹";
-            position: absolute;
-            font-size: 150px;
-            opacity: 0.05;
-            bottom: 10%;
-            right: 10%;
-            animation: float 8s ease-in-out infinite reverse;
-        }
+        .rose-1 { top: -50px; left: -50px; transform: rotate(-20deg); }
+        .rose-2 { bottom: -50px; right: -50px; transform: rotate(15deg); }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-        }
-
-        .container {
+        .app-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 40px;
+            padding: 40px;
             text-align: center;
-            padding: 20px;
-            max-width: 90vw;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             z-index: 10;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
         }
 
         h1 {
-            color: #d4232a;
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
-            animation: pulse 3s ease-in-out infinite;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            background: linear-gradient(to right, #fff, var(--pdx-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             font-weight: 800;
-            letter-spacing: 2px;
+            letter-spacing: -1px;
         }
 
-        h1::before, h1::after {
-            content: "🌹";
-            margin: 0 15px;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); text-shadow: 3px 3px 6px rgba(212, 35, 42, 0.3); }
-            50% { opacity: 0.9; transform: scale(1.02); text-shadow: 3px 3px 20px rgba(212, 35, 42, 0.6); }
-        }
-
-        .image-container {
-            position: relative;
-            display: inline-block;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(212, 35, 42, 0.3);
-            transition: transform 0.3s ease;
-            border: 4px solid #d4232a;
-            background: linear-gradient(45deg, #d4232a, #2d5a27);
-            padding: 4px;
-        }
-
-        .image-container:hover {
-            transform: scale(1.02);
-            box-shadow: 0 25px 70px rgba(212, 35, 42, 0.5);
-        }
-
-        .image-container img {
-            max-width: 100%;
-            max-height: 60vh;
-            display: block;
-            border-radius: 16px;
-            background: #fff;
-        }
-
-        .audio-controls {
-            margin-top: 30px;
-            padding: 25px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            display: inline-flex;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-            border: 2px solid rgba(212, 35, 42, 0.3);
-        }
-
-        button {
-            background: linear-gradient(135deg, #d4232a 0%, #8b1c1c 100%);
-            border: none;
-            color: white;
-            padding: 15px 30px;
-            font-size: 18px;
+        .image-wrapper {
+            width: 100%;
+            aspect-ratio: 1;
+            margin-bottom: 30px;
             border-radius: 30px;
+            overflow: hidden;
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .app-card:hover .image-wrapper img {
+            transform: scale(1.05);
+        }
+
+        /* Audio Controls */
+        .controls-ui {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .main-btn {
+            background: var(--pdx-red);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 4px 15px rgba(212, 35, 42, 0.4);
-        }
-
-        button:hover {
-            background: linear-gradient(135deg, #ff2a33 0%, #d4232a 100%);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(212, 35, 42, 0.6);
-        }
-
-        button:active {
-            transform: translateY(-1px);
-        }
-
-        .status {
-            color: #eaeaea;
-            font-size: 16px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-weight: 500;
-        }
-
-        .playing-indicator {
-            display: inline-flex;
-            gap: 4px;
-            align-items: flex-end;
-            height: 25px;
-        }
-
-        .bar {
-            width: 4px;
-            background: linear-gradient(to top, #d4232a, #ff6b6b);
-            animation: sound 0.5s ease-in-out infinite alternate;
-            border-radius: 2px;
-        }
-
-        .bar:nth-child(1) { height: 10px; animation-delay: 0s; }
-        .bar:nth-child(2) { height: 20px; animation-delay: 0.1s; }
-        .bar:nth-child(3) { height: 15px; animation-delay: 0.2s; }
-        .bar:nth-child(4) { height: 25px; animation-delay: 0.3s; }
-
-        @keyframes sound {
-            from { height: 8px; }
-            to { height: 28px; }
-        }
-
-        .hidden { display: none !important; }
-
-        .volume-control {
-            margin-top: 15px;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 10px;
             justify-content: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(212, 35, 42, 0.3);
+        }
+
+        .main-btn:hover {
+            background: #f02d35;
+            transform: scale(1.02);
+            box-shadow: 0 15px 25px rgba(212, 35, 42, 0.4);
+        }
+
+        .main-btn:active { transform: scale(0.98); }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Visualizer */
+        .visualizer {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 20px;
+        }
+
+        .vis-bar {
+            width: 3px;
+            height: 4px;
+            background: var(--pdx-red);
+            border-radius: 10px;
+            transition: height 0.2s ease;
+        }
+
+        .playing .vis-bar {
+            animation: bounce 0.6s ease-in-out infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { height: 4px; }
+            to { height: 20px; }
+        }
+
+        /* Volume Slider Customization */
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0,0,0,0.2);
+            padding: 10px 20px;
+            border-radius: 15px;
         }
 
         input[type="range"] {
-            width: 100px;
-            accent-color: #d4232a;
+            flex: 1;
+            accent-color: var(--pdx-red);
+            cursor: pointer;
         }
 
-        /* Mobile responsiveness */
-        @media (max-width: 600px) {
-            h1 { font-size: 1.8rem; }
-            h1::before, h1::after { margin: 0 8px; }
-            .audio-controls { flex-direction: column; width: 100%; gap: 15px; }
-            .image-container img { max-height: 50vh; }
-        }
-
-        /* Loading state */
-        .loading {
-            opacity: 0.7;
-            pointer-events: none;
-        }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Portland</h1>
 
-        <div class="image-container">
-            <img src="Keith Wilson 3D.png" alt="Keith Wilson 3D Character">
+    <span class="ambient-rose rose-1">🌹</span>
+    <span class="ambient-rose rose-2">🌹</span>
+
+    <div class="app-card">
+        <h1>Keith Wilson's Wonderland</h1>
+
+        <div class="image-wrapper">
+            <img src="Keith Wilson 3D.png" alt="Keith Wilson 3D" onerror="this.src='https://via.placeholder.com/400x400?text=Keith+Wilson+3D'">
         </div>
 
-        <div class="audio-controls">
-            <button id="playBtn" onclick="toggleAudio()">▶ Play Music</button>
-            <div class="status" id="status">
-                <span>🌹 Click play to start</span>
-            </div>
-            <div class="playing-indicator hidden" id="visualizer">
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-            </div>
-            <div class="volume-control hidden" id="volumeControl">
+        <div class="controls-ui">
+            <button id="playBtn" class="main-btn">
+                <span id="btnIcon">▶</span>
+                <span id="btnText">Listen Now</span>
+            </button>
+
+            <div class="volume-container">
+                <span>🔈</span>
+                <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.7">
                 <span>🔊</span>
-                <input type="range" min="0" max="100" value="70" oninput="setVolume(this.value)">
+            </div>
+
+            <div class="status-row">
+                <span id="statusLabel">Ready to play</span>
+                <div id="visualizer" class="visualizer">
+                    <div class="vis-bar" style="animation-delay: 0.1s"></div>
+                    <div class="vis-bar" style="animation-delay: 0.2s"></div>
+                    <div class="vis-bar" style="animation-delay: 0.3s"></div>
+                    <div class="vis-bar" style="animation-delay: 0.4s"></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <audio id="audioPlayer" loop preload="auto">
+    <audio id="audioPlayer" preload="auto" loop>
         <source src="Welcome to Portland.mp3" type="audio/mpeg">
-        <source src="Welcome%20to%20Portland.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
     </audio>
 
     <script>
         const audio = document.getElementById('audioPlayer');
         const playBtn = document.getElementById('playBtn');
-        const status = document.getElementById('status');
+        const btnIcon = document.getElementById('btnIcon');
+        const btnText = document.getElementById('btnText');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const statusLabel = document.getElementById('statusLabel');
         const visualizer = document.getElementById('visualizer');
-        const volumeControl = document.getElementById('volumeControl');
 
-        // Set initial volume
+        // Initial Setup
         audio.volume = 0.7;
 
-        function toggleAudio() {
-            if (audio.paused) {
-                // Try to play
-                const playPromise = audio.play();
-
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        // Playing successfully
-                        updateUI(true);
-                    }).catch(error => {
-                        console.error('Playback failed:', error);
-                        status.innerHTML = '<span>❌ Error playing audio. Check file name.</span>';
-                        // Try alternative approach
-                        tryAlternativePlayback();
-                    });
+        // Toggle Function
+        async function togglePlay() {
+            try {
+                if (audio.paused) {
+                    await audio.play();
+                    updateUI(true);
+                } else {
+                    audio.pause();
+                    updateUI(false);
                 }
-            } else {
-                audio.pause();
-                updateUI(false);
+            } catch (err) {
+                console.error("Playback error:", err);
+                statusLabel.innerText = "Error: File not found";
+                statusLabel.style.color = "#ff4d4d";
             }
         }
 
         function updateUI(isPlaying) {
             if (isPlaying) {
-                playBtn.innerHTML = '⏸ Pause Music';
-                status.innerHTML = '<span>🎵 Now Playing...</span>';
-                visualizer.classList.remove('hidden');
-                volumeControl.classList.remove('hidden');
+                btnIcon.innerText = "⏸";
+                btnText.innerText = "Pause Session";
+                statusLabel.innerText = "Now Playing...";
+                visualizer.classList.add('playing');
             } else {
-                playBtn.innerHTML = '▶ Play Music';
-                status.innerHTML = '<span>🌹 Click play to start</span>';
-                visualizer.classList.add('hidden');
-                volumeControl.classList.add('hidden');
+                btnIcon.innerText = "▶";
+                btnText.innerText = "Resume Music";
+                statusLabel.innerText = "Paused";
+                visualizer.classList.remove('playing');
             }
         }
 
-        function setVolume(value) {
-            audio.volume = value / 100;
-        }
-
-        function tryAlternativePlayback() {
-            // Try with encoded filename
-            const encodedSrc = encodeURIComponent('Welcome to Portland.mp3');
-            audio.src = encodedSrc;
-            audio.play().then(() => {
-                updateUI(true);
-            }).catch(err => {
-                console.error('Alternative also failed:', err);
-                status.innerHTML = '<span>❌ Could not play. Check that "Welcome to Portland.mp3" exists.</span>';
-            });
-        }
-
-        // Handle audio events
-        audio.addEventListener('ended', () => {
-            // Loop is handled by attribute, but double-check
-            audio.currentTime = 0;
-            audio.play();
+        // Listeners
+        playBtn.addEventListener('click', togglePlay);
+        
+        volumeSlider.addEventListener('input', (e) => {
+            audio.volume = e.target.value;
         });
 
-        audio.addEventListener('error', (e) => {
-            console.error('Audio error:', e);
-            status.innerHTML = '<span>❌ Audio file not found or unsupported format</span>';
+        // Error Handling for the file path
+        audio.addEventListener('error', () => {
+            statusLabel.innerText = "File 'Welcome to Portland.mp3' missing!";
+            statusLabel.style.color = "#ff4d4d";
         });
-
-        // Auto-play attempt (browsers block this usually, but we try)
-        document.addEventListener('DOMContentLoaded', () => {
-            // Preload check
-          <response clipped><NOTE>Result is longer than **10000 characters**, will be **truncated**.</NOTE>
+    </script>
+</body>
+</html>
