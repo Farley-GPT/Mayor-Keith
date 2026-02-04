@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Portland</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2d5a27 0%, #1a3a1a 50%, #0d1f0d 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Rose City decorative elements */
+        body::before {
+            content: "🌹";
+            position: absolute;
+            font-size: 200px;
+            opacity: 0.05;
+            top: 10%;
+            left: 10%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        body::after {
+            content: "🌹";
+            position: absolute;
+            font-size: 150px;
+            opacity: 0.05;
+            bottom: 10%;
+            right: 10%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            max-width: 90vw;
+            z-index: 10;
+        }
+
+        h1 {
+            color: #d4232a;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            animation: pulse 3s ease-in-out infinite;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        h1::before, h1::after {
+            content: "🌹";
+            margin: 0 15px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); text-shadow: 3px 3px 6px rgba(212, 35, 42, 0.3); }
+            50% { opacity: 0.9; transform: scale(1.02); text-shadow: 3px 3px 20px rgba(212, 35, 42, 0.6); }
+        }
+
+        .image-container {
+            position: relative;
+            display: inline-block;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(212, 35, 42, 0.3);
+            transition: transform 0.3s ease;
+            border: 4px solid #d4232a;
+            background: linear-gradient(45deg, #d4232a, #2d5a27);
+            padding: 4px;
+        }
+
+        .image-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 25px 70px rgba(212, 35, 42, 0.5);
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 60vh;
+            display: block;
+            border-radius: 16px;
+            background: #fff;
+        }
+
+        .audio-controls {
+            margin-top: 30px;
+            padding: 25px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            display: inline-flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            border: 2px solid rgba(212, 35, 42, 0.3);
+        }
+
+        button {
+            background: linear-gradient(135deg, #d4232a 0%, #8b1c1c 100%);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(212, 35, 42, 0.4);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #ff2a33 0%, #d4232a 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(212, 35, 42, 0.6);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        .status {
+            color: #eaeaea;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+
+        .playing-indicator {
+            display: inline-flex;
+            gap: 4px;
+            align-items: flex-end;
+            height: 25px;
+        }
+
+        .bar {
+            width: 4px;
+            background: linear-gradient(to top, #d4232a, #ff6b6b);
+            animation: sound 0.5s ease-in-out infinite alternate;
+            border-radius: 2px;
+        }
+
+        .bar:nth-child(1) { height: 10px; animation-delay: 0s; }
+        .bar:nth-child(2) { height: 20px; animation-delay: 0.1s; }
+        .bar:nth-child(3) { height: 15px; animation-delay: 0.2s; }
+        .bar:nth-child(4) { height: 25px; animation-delay: 0.3s; }
+
+        @keyframes sound {
+            from { height: 8px; }
+            to { height: 28px; }
+        }
+
+        .hidden { display: none !important; }
+
+        .volume-control {
+            margin-top: 15px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        input[type="range"] {
+            width: 100px;
+            accent-color: #d4232a;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            h1::before, h1::after { margin: 0 8px; }
+            .audio-controls { flex-direction: column; width: 100%; gap: 15px; }
+            .image-container img { max-height: 50vh; }
+        }
+
+        /* Loading state */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Portland</h1>
+
+        <div class="image-container">
+            <img src="Keith Wilson 3D.png" alt="Keith Wilson 3D Character">
+        </div>
+
+        <div class="audio-controls">
+            <button id="playBtn" onclick="toggleAudio()">▶ Play Music</button>
+            <div class="status" id="status">
+                <span>🌹 Click play to start</span>
+            </div>
+            <div class="playing-indicator hidden" id="visualizer">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+            <div class="volume-control hidden" id="volumeControl">
+                <span>🔊</span>
+                <input type="range" min="0" max="100" value="70" oninput="setVolume(this.value)">
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer" loop preload="auto">
+        <source src="Welcome to Portland.mp3" type="audio/mpeg">
+        <source src="Welcome%20to%20Portland.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        const audio = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const status = document.getElementById('status');
+        const visualizer = document.getElementById('visualizer');
+        const volumeControl = document.getElementById('volumeControl');
+
+        // Set initial volume
+        audio.volume = 0.7;
+
+        function toggleAudio() {
+            if (audio.paused) {
+                // Try to play
+                const playPromise = audio.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        // Playing successfully
+                        updateUI(true);
+                    }).catch(error => {
+                        console.error('Playback failed:', error);
+                        status.innerHTML = '<span>❌ Error playing audio. Check file name.</span>';
+                        // Try alternative approach
+                        tryAlternativePlayback();
+                    });
+                }
+            } else {
+                audio.pause();
+                updateUI(false);
+            }
+        }
+
+        function updateUI(isPlaying) {
+            if (isPlaying) {
+                playBtn.innerHTML = '⏸ Pause Music';
+                status.innerHTML = '<span>🎵 Now Playing...</span>';
+                visualizer.classList.remove('hidden');
+                volumeControl.classList.remove('hidden');
+            } else {
+                playBtn.innerHTML = '▶ Play Music';
+                status.innerHTML = '<span>🌹 Click play to start</span>';
+                visualizer.classList.add('hidden');
+                volumeControl.classList.add('hidden');
+            }
+        }
+
+        function setVolume(value) {
+            audio.volume = value / 100;
+        }
+
+        function tryAlternativePlayback() {
+            // Try with encoded filename
+            const encodedSrc = encodeURIComponent('Welcome to Portland.mp3');
+            audio.src = encodedSrc;
+            audio.play().then(() => {
+                updateUI(true);
+            }).catch(err => {
+                console.error('Alternative also failed:', err);
+                status.innerHTML = '<span>❌ Could not play. Check that "Welcome to Portland.mp3" exists.</span>';
+            });
+        }
+
+        // Handle audio events
+        audio.addEventListener('ended', () => {
+            // Loop is handled by attribute, but double-check
+            audio.currentTime = 0;
+            audio.play();
+        });
+
+        audio.addEventListener('error', (e) => {
+            console.error('Audio error:', e);
+            status.innerHTML = '<span>❌ Audio file not found or unsupported format</span>';
+        });
+
+        // Auto-play attempt (browsers block this usually, but we try)
+        document.addEventListener('DOMContentLoaded', () => {
+            // Preload check
+          <response clipped><NOTE>Result is longer than **10000 characters**, will be **truncated**.</NOTE>
